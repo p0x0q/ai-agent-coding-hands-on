@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # 作業ディレクトリ用のWebサーバー
+  working:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./working-directory:/usr/share/nginx/html:ro
+    container_name: hello-claude-working
+    restart: unless-stopped
+
+  # 完成例用のWebサーバー
+  example:
+    image: nginx:alpine
+    ports:
+      - "8001:80"
+    volumes:
+      - ./completed-example:/usr/share/nginx/html:ro
+    container_name: hello-claude-example
+    restart: unless-stopped

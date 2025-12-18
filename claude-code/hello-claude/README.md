@@ -76,6 +76,26 @@ hello-claude/
 
 ### ステップ3: アプリケーションの実行
 
+#### 方法1: Docker Compose（推奨）
+
+```bash
+# hello-claudeディレクトリで実行
+docker-compose up
+
+# バックグラウンド起動の場合
+docker-compose up -d
+```
+
+- 作業ディレクトリ: http://localhost:8000
+- 完成例: http://localhost:8001
+
+停止する場合：
+```bash
+docker-compose down
+```
+
+#### 方法2: ローカルサーバー
+
 1. 作業ディレクトリに移動
    ```bash
    cd working-directory
@@ -97,8 +117,13 @@ hello-claude/
 
 ### 完成例を確認
 
-わからなくなったり、正解を確認したいときは：
+#### Docker Composeの場合
+```bash
+# すでに起動している場合
+http://localhost:8001
+```
 
+#### ローカルサーバーの場合
 ```bash
 cd completed-example
 python3 -m http.server 8001
