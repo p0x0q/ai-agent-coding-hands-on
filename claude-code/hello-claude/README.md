@@ -34,16 +34,20 @@
 
 ```
 hello-claude/
-├── app/                    # アプリケーション本体（ここに作成）
-│   ├── index.html         # メインHTMLファイル
-│   ├── styles.css         # スタイルシート
-│   └── script.js          # JavaScript
-├── prompts/               # プロンプト・手順書
-│   ├── 01-setup.md       # セットアップ手順
-│   ├── 02-create-ui.md   # UI作成のプロンプト
-│   ├── 03-add-logic.md   # ロジック追加のプロンプト
-│   └── prompts.json      # 再利用可能なプロンプト集
-└── README.md             # このファイル
+├── working-directory/     # 作業ディレクトリ（ここで実装）
+│   └── (空 - ここにファイルを作成していく)
+├── completed-example/     # 完成例（参考用）
+│   ├── index.html        # 完成版HTML
+│   ├── styles.css        # 完成版CSS
+│   ├── script.js         # 完成版JavaScript
+│   ├── test.html         # テストページ
+│   └── README.md         # 実行方法と解説
+├── prompts/              # プロンプト・手順書
+│   ├── 00-setup.md      # セットアップ手順
+│   ├── 01-create-ui.md  # UI作成のプロンプト
+│   ├── 02-add-logic.md  # ロジック追加のプロンプト
+│   └── prompts.json     # 再利用可能なプロンプト集
+└── README.md            # このファイル
 ```
 
 ## 進め方
@@ -64,17 +68,17 @@ hello-claude/
 
 `prompts/` ディレクトリの手順書を順番に実行します：
 
-1. [01-setup.md](./prompts/01-setup.md) - プロジェクトのセットアップ
-2. [02-create-ui.md](./prompts/02-create-ui.md) - UIの作成
-3. [03-add-logic.md](./prompts/03-add-logic.md) - ロジックの追加
+1. [00-setup.md](./prompts/00-setup.md) - プロジェクトのセットアップ
+2. [01-create-ui.md](./prompts/01-create-ui.md) - UIの作成
+3. [02-add-logic.md](./prompts/02-add-logic.md) - ロジックの追加
 
-各ステップで、記載されているプロンプトをClaude Codeに入力し、指示に従って開発を進めます。
+各ステップで、記載されているプロンプトをClaude Codeに入力し、`working-directory/` 内で開発を進めます。
 
 ### ステップ3: アプリケーションの実行
 
-1. アプリディレクトリに移動
+1. 作業ディレクトリに移動
    ```bash
-   cd app
+   cd working-directory
    ```
 
 2. ローカルサーバーを起動
@@ -90,6 +94,18 @@ hello-claude/
    ```
    http://localhost:8000
    ```
+
+### 完成例を確認
+
+わからなくなったり、正解を確認したいときは：
+
+```bash
+cd completed-example
+python3 -m http.server 8001
+# ブラウザで http://localhost:8001 を開く
+```
+
+完成例の詳細は [completed-example/README.md](./completed-example/README.md) を参照してください。
 
 ## 学べるポイント
 

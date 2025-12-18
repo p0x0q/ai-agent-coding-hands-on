@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タスクリスト</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>タスクリスト</h1>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="新しいタスクを入力"
+                aria-label="新しいタスク"
+            />
+            <button id="addButton" aria-label="タスクを追加">追加</button>
+        </div>
+
+        <ul id="taskList" role="list"></ul>
+    </div>
+</body>
+</html>
