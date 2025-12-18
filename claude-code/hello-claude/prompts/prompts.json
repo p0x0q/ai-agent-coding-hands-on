@@ -1,0 +1,103 @@
+{
+  "prompts": [
+    {
+      "id": "create-html-structure",
+      "category": "setup",
+      "title": "HTML基本構造の作成",
+      "description": "HTML5の標準的な構造を作成",
+      "prompt": "index.htmlを作成してください。\n\n要件：\n- HTML5ドキュメント宣言\n- 日本語設定（lang=\"ja\"）\n- タイトル: \"{タイトル}\"\n- styles.cssへのリンク\n- script.jsへのリンク（defer属性付き）\n- 基本的なbodyタグ",
+      "variables": ["タイトル"]
+    },
+    {
+      "id": "create-task-ui",
+      "category": "ui",
+      "title": "タスクリストUIの作成",
+      "description": "タスクリストアプリのUIコンポーネントを作成",
+      "prompt": "index.htmlのbodyタグ内に、タスクリストアプリのUIを作成してください。\n\n以下の要素を含めてください：\n1. アプリのタイトル（h1タグ）\n2. タスク入力エリア：\n   - テキスト入力フィールド（placeholder: \"新しいタスクを入力\"）\n   - 追加ボタン\n3. タスク一覧表示エリア：\n   - ul要素（id=\"taskList\"）\n\nHTML5のセマンティックなタグを使用し、各要素には適切なid/classを設定してください。"
+    },
+    {
+      "id": "style-modern-ui",
+      "category": "styling",
+      "title": "モダンなスタイリング",
+      "description": "クリーンでモダンなCSSスタイルを適用",
+      "prompt": "styles.cssに、以下のスタイルを追加してください：\n\nデザインコンセプト：\n- クリーンでモダンな見た目\n- 中央寄せレイアウト\n- 最大幅{幅}px\n- 適度な余白とパディング\n\n具体的なスタイル：\n1. 全体：フォント sans-serif、背景色 #f5f5f5、コンテナは白背景\n2. タイトル：色 #333、中央寄せ\n3. 入力フィールド：ボーダー 1px solid #ddd、パディング 10px、角丸 4px\n4. ボタン：背景色 {ボタン色}、白文字、パディング 10px 20px、角丸 4px、hover時に濃く\n5. タスクリスト：リストスタイルなし、各アイテムに軽い背景",
+      "variables": ["幅", "ボタン色"]
+    },
+    {
+      "id": "add-task-functionality",
+      "category": "logic",
+      "title": "タスク追加機能",
+      "description": "JavaScriptでタスク追加機能を実装",
+      "prompt": "script.jsに、タスクを追加する機能を実装してください。\n\n要件：\n1. DOM要素の取得（入力フィールド、追加ボタン、タスクリスト）\n2. タスク追加機能：\n   - 追加ボタンクリックで実行\n   - 入力値が空の場合は何もしない\n   - 新しいliタグを作成してタスクテキストを表示\n   - タスクリストに追加\n   - 入力フィールドをクリア\n3. Enterキーでも追加できるように\n\nコードには適切なコメントを付けてください。"
+    },
+    {
+      "id": "add-delete-functionality",
+      "category": "logic",
+      "title": "タスク削除機能",
+      "description": "タスク削除ボタンとその機能を追加",
+      "prompt": "script.jsとstyles.cssを修正して、タスク削除機能を追加してください。\n\nJavaScript要件：\n1. 各タスクに削除ボタンを追加（テキスト: \"×\"、class: \"delete-btn\"）\n2. 削除ボタンをクリックしたら、そのタスク（li要素）を一覧から削除\n\nCSS要件：\n1. 削除ボタンのスタイル：\n   - 小さめのボタン\n   - 赤系の色\n   - タスクの右側に配置\n   - hover時に色が濃くなる\n\n既存の機能は維持してください。"
+    },
+    {
+      "id": "add-localstorage",
+      "category": "advanced",
+      "title": "LocalStorage永続化",
+      "description": "LocalStorageを使ってデータを永続化",
+      "prompt": "script.jsにLocalStorageを使った永続化機能を追加してください。\n\n要件：\n1. タスク追加時：LocalStorageに保存\n2. タスク削除時：LocalStorageから削除\n3. ページ読み込み時：LocalStorageからタスクを読み込んで表示\n4. データ形式：タスクの配列をJSON形式で保存（キー名: \"tasks\"）\n\n実装方法について、コメントで説明を加えてください。"
+    },
+    {
+      "id": "add-edit-functionality",
+      "category": "advanced",
+      "title": "タスク編集機能",
+      "description": "タスクをダブルクリックで編集可能に",
+      "prompt": "script.jsにタスク編集機能を追加してください。\n\n要件：\n- タスクテキストをダブルクリックすると編集モードに\n- テキストが入力フィールドに変換される\n- Enterキーで保存\n- Escキーでキャンセル\n- LocalStorageも更新\n\n既存の機能は維持してください。"
+    },
+    {
+      "id": "add-checkbox-functionality",
+      "category": "advanced",
+      "title": "完了/未完了機能",
+      "description": "チェックボックスで完了状態を管理",
+      "prompt": "script.jsとstyles.cssを修正して、タスクの完了/未完了を管理する機能を追加してください。\n\n要件：\n1. 各タスクにチェックボックスを追加\n2. チェックボックスをクリックで完了/未完了を切り替え\n3. 完了したタスクは打ち消し線（text-decoration: line-through）\n4. 完了状態もLocalStorageに保存\n5. タスクのデータ構造を { text: string, completed: boolean } に変更"
+    },
+    {
+      "id": "debug-event-listener",
+      "category": "debugging",
+      "title": "イベントリスナーのデバッグ",
+      "description": "イベントリスナーが正しく設定されているか確認",
+      "prompt": "script.jsが正しく読み込まれ、イベントリスナーが設定されているか確認するためのデバッグコードを追加してください。\n\nコンソールに以下を出力：\n1. スクリプトが読み込まれたメッセージ\n2. DOM要素が正しく取得できているか\n3. イベントリスナーが設定されたメッセージ\n\n確認後、デバッグコードをコメントアウトできるようにしてください。"
+    },
+    {
+      "id": "refactor-code",
+      "category": "refactoring",
+      "title": "コードのリファクタリング",
+      "description": "コードを整理して可読性と保守性を向上",
+      "prompt": "script.jsをリファクタリングしてください。\n\n改善点：\n1. 関数を小さく分割（単一責任の原則）\n2. コードの重複を削除\n3. 定数を明確に定義（ファイル先頭に）\n4. エラーハンドリングを追加\n5. JSDocコメントを追加\n\nコメントで変更点を説明してください。機能は変更しないでください。"
+    },
+    {
+      "id": "add-responsive-design",
+      "category": "styling",
+      "title": "レスポンシブデザイン対応",
+      "description": "モバイルデバイスに対応したレスポンシブデザインを追加",
+      "prompt": "styles.cssにメディアクエリを追加して、スマートフォンでも見やすいデザインにしてください。\n\n要件：\n1. ブレークポイント：768px以下\n2. モバイルでの調整：\n   - コンテナの幅を100%に\n   - パディングを調整\n   - フォントサイズを調整\n   - ボタンのサイズを大きく（タップしやすく）\n\n既存のデスクトップデザインは維持してください。"
+    },
+    {
+      "id": "add-dark-mode",
+      "category": "styling",
+      "title": "ダークモード対応",
+      "description": "システムのダークモード設定に対応",
+      "prompt": "styles.cssにダークモード用のスタイルを追加してください。\n\n要件：\n1. @media (prefers-color-scheme: dark) を使用\n2. ダークモードの色：\n   - 背景: #1a1a1a\n   - テキスト: #e0e0e0\n   - コンテナ: #2d2d2d\n   - ボタン: 彩度を下げた色\n   - ボーダー: #444\n\n視認性を保ちつつ、目に優しいデザインにしてください。"
+    }
+  ],
+  "usage": {
+    "description": "このファイルには、hello-claudeサンプルで使用できる再利用可能なプロンプトが含まれています。",
+    "how_to_use": "各プロンプトの 'prompt' フィールドをClaude Codeに入力してください。{変数}がある場合は、実際の値に置き換えてください。",
+    "categories": {
+      "setup": "プロジェクトのセットアップ関連",
+      "ui": "UIコンポーネントの作成",
+      "styling": "CSSスタイリング",
+      "logic": "JavaScript機能実装",
+      "advanced": "応用的な機能",
+      "debugging": "デバッグとトラブルシューティング",
+      "refactoring": "コードの改善とリファクタリング"
+    }
+  }
+}
