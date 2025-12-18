@@ -50,26 +50,22 @@
 
 ```
 langgraph-agent/
-├── app/                          # Pythonアプリケーション
-│   ├── agent/                   # エージェント実装
-│   │   ├── __init__.py
-│   │   ├── graph.py            # LangGraphのグラフ定義
-│   │   ├── tools.py            # カスタムツール
-│   │   └── state.py            # ステート定義
-│   ├── api/                     # FastAPI
-│   │   ├── __init__.py
-│   │   ├── main.py             # APIエントリーポイント
-│   │   └── routes.py           # APIルート
-│   ├── utils/                   # ユーティリティ
-│   │   └── config.py           # 設定管理
-│   ├── requirements.txt         # 依存関係
-│   └── main.py                  # アプリケーション起動
+├── working-directory/            # 作業ディレクトリ（ここで実装）
+│   └── (空 - プロンプトに従って作成)
+├── completed-example/            # 完成例（参考用）
+│   ├── app/
+│   │   ├── agent/               # エージェント実装
+│   │   ├── api/                 # FastAPI
+│   │   └── utils/               # ユーティリティ
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── README.md
 ├── prompts/                      # プロンプト・手順書
-│   ├── 01-setup.md              # プロジェクトセットアップ
-│   ├── 02-basic-agent.md        # 基本エージェント実装
-│   ├── 03-custom-tools.md       # カスタムツール追加
-│   ├── 04-api-server.md         # API化
+│   ├── 00-setup.md              # プロジェクトセットアップ
+│   ├── 01-basic-agent.md        # 基本エージェント実装
+│   ├── 02-custom-tools.md       # カスタムツール追加
 │   └── prompts.json             # 再利用可能なプロンプト
+├── docker-compose.yaml           # Docker Compose設定
 └── README.md                     # このファイル
 ```
 
@@ -77,36 +73,77 @@ langgraph-agent/
 
 ### ステップ1: 環境構築
 
-1. このディレクトリに移動
+1. working-directoryに移動してClaude Codeを起動
    ```bash
-   cd claude-code/langgraph-agent
+   cd working-directory
+   claude
    ```
 
-2. 仮想環境を作成・有効化
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # macOS/Linux
-   # または
-   .venv\Scripts\activate  # Windows
-   ```
-
-3. プロンプトに従ってセットアップ
-   👉 [prompts/01-setup.md](./prompts/01-setup.md)
+2. プロンプトに従ってセットアップ
+   👉 [prompts/00-setup.md](./prompts/00-setup.md)
 
 ### ステップ2: 基本エージェント実装
 
-4. LangGraphで基本的なエージェントを構築
-   👉 [prompts/02-basic-agent.md](./prompts/02-basic-agent.md)
+3. LangGraphで基本的なエージェントを構築
+   👉 [prompts/01-basic-agent.md](./prompts/01-basic-agent.md)
 
 ### ステップ3: カスタムツール追加
 
-5. 独自のツールを作成してエージェントに追加
-   👉 [prompts/03-custom-tools.md](./prompts/03-custom-tools.md)
+4. 独自のツールを作成してエージェントに追加
+   👉 [prompts/02-custom-tools.md](./prompts/02-custom-tools.md)
 
-### ステップ4: API化
+## アプリケーションの起動
 
-6. FastAPIでRESTful APIとして公開
-   👉 [prompts/04-api-server.md](./prompts/04-api-server.md)
+### 方法1: Docker Compose（推奨）
+
+```bash
+# langgraph-agentディレクトリで実行
+docker-compose up
+
+# バックグラウンド起動
+docker-compose up -d
+```
+
+- 作業ディレクトリ: http://localhost:8000
+- 完成例: http://localhost:8001
+
+API docs:
+- http://localhost:8000/docs (作業ディレクトリ)
+- http://localhost:8001/docs (完成例)
+
+停止：
+```bash
+docker-compose down
+```
+
+### 方法2: ローカル環境
+
+```bash
+cd working-directory
+
+# 仮想環境の有効化
+source .venv/bin/activate  # macOS/Linux
+# または
+.venv\Scripts\activate  # Windows
+
+# サーバー起動
+uvicorn app.api.main:app --reload
+```
+
+http://localhost:8000 にアクセス
+
+## 完成例を確認
+
+Docker Composeですでに起動している場合：
+- http://localhost:8001
+- http://localhost:8001/docs
+
+ローカルで確認する場合：
+```bash
+cd completed-example
+source .venv/bin/activate
+uvicorn app.api.main:app --port 8001 --reload
+```
 
 ## LangGraphの基礎
 

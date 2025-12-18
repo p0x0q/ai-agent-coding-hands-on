@@ -50,25 +50,24 @@
 
 ```
 nextjs-chat-app/
-├── app/                          # Next.jsアプリケーション
-│   ├── actions/                 # Server Actions
-│   │   └── chat.ts             # Claude API呼び出し
-│   ├── components/              # Reactコンポーネント
-│   │   ├── ChatMessage.tsx     # メッセージ表示
-│   │   ├── ChatInput.tsx       # 入力フォーム
-│   │   └── ChatContainer.tsx   # チャット全体
-│   ├── lib/                     # ユーティリティ
-│   │   └── anthropic.ts        # Anthropicクライアント設定
-│   ├── types/                   # 型定義
-│   │   └── chat.ts             # チャット関連の型
-│   ├── page.tsx                 # メインページ
-│   └── layout.tsx               # ルートレイアウト
+├── working-directory/            # 作業ディレクトリ（ここで実装）
+│   └── (空 - プロンプトに従って作成)
+├── completed-example/            # 完成例（参考用）
+│   ├── src/
+│   │   └── app/
+│   │       ├── actions/         # Server Actions
+│   │       ├── components/      # Reactコンポーネント
+│   │       ├── lib/            # ユーティリティ
+│   │       └── types/          # 型定義
+│   ├── package.json
+│   ├── Dockerfile
+│   └── README.md
 ├── prompts/                      # プロンプト・手順書
-│   ├── 01-setup.md              # プロジェクトセットアップ
-│   ├── 02-api-integration.md    # API統合
-│   ├── 03-streaming.md          # ストリーミング実装
-│   ├── 04-ui-enhancement.md     # UI改善
+│   ├── 00-setup.md              # プロジェクトセットアップ
+│   ├── 01-api-integration.md    # API統合
+│   ├── 02-streaming.md          # ストリーミング実装
 │   └── prompts.json             # 再利用可能なプロンプト
+├── docker-compose.yaml           # Docker Compose設定
 └── README.md                     # このファイル
 ```
 
@@ -76,28 +75,66 @@ nextjs-chat-app/
 
 ### ステップ1: 環境構築
 
-1. このディレクトリに移動
+1. working-directoryに移動してClaude Codeを起動
    ```bash
-   cd claude-code/nextjs-chat-app
+   cd working-directory
+   claude
    ```
 
 2. プロンプトに従ってプロジェクトをセットアップ
-   👉 [prompts/01-setup.md](./prompts/01-setup.md)
+   👉 [prompts/00-setup.md](./prompts/00-setup.md)
 
 ### ステップ2: Claude API統合
 
 3. Claude APIとの連携を実装
-   👉 [prompts/02-api-integration.md](./prompts/02-api-integration.md)
+   👉 [prompts/01-api-integration.md](./prompts/01-api-integration.md)
 
 ### ステップ3: ストリーミング実装
 
 4. リアルタイムストリーミング機能を追加
-   👉 [prompts/03-streaming.md](./prompts/03-streaming.md)
+   👉 [prompts/02-streaming.md](./prompts/02-streaming.md)
 
-### ステップ4: UI改善
+## アプリケーションの起動
 
-5. マークダウン対応とスタイル改善
-   👉 [prompts/04-ui-enhancement.md](./prompts/04-ui-enhancement.md)
+### 方法1: Docker Compose（推奨）
+
+```bash
+# nextjs-chat-appディレクトリで実行
+docker-compose up
+
+# バックグラウンド起動
+docker-compose up -d
+```
+
+- 作業ディレクトリ: http://localhost:3000
+- 完成例: http://localhost:3001
+
+停止：
+```bash
+docker-compose down
+```
+
+### 方法2: ローカル環境
+
+```bash
+cd working-directory
+npm install
+npm run dev
+```
+
+http://localhost:3000 にアクセス
+
+## 完成例を確認
+
+Docker Composeですでに起動している場合：
+- http://localhost:3001
+
+ローカルで確認する場合：
+```bash
+cd completed-example
+npm install
+npm run dev
+```
 
 ## 学べるポイント
 

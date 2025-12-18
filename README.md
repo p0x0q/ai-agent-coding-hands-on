@@ -81,6 +81,27 @@ cd ai-agent-coding-hands-on
 4. `prompts/` ディレクトリの手順（00-setup.md から順番）に従って実装
 5. 困ったら `completed-example/` の完成例を参照
 
+### Docker Composeでの起動（推奨）
+
+各サンプルは Docker Compose に対応しています：
+
+```bash
+# 例：hello-claude を起動
+cd claude-code/hello-claude
+docker-compose up
+
+# バックグラウンド起動
+docker-compose up -d
+
+# 停止
+docker-compose down
+```
+
+**ポート番号**：
+- hello-claude: 8000 (作業), 8001 (完成例)
+- nextjs-chat-app: 3000 (作業), 3001 (完成例)
+- langgraph-agent: 8000 (作業), 8001 (完成例)
+
 ## 推奨する学習順序
 
 ### 初心者向け

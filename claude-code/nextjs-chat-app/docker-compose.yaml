@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # 作業ディレクトリ用の開発サーバー
+  working:
+    build:
+      context: ./working-directory
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./working-directory:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./working-directory/.env.local
+    container_name: nextjs-chat-working
+    command: npm run dev
+    restart: unless-stopped
+
+  # 完成例用の開発サーバー
+  example:
+    build:
+      context: ./completed-example
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./completed-example:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./completed-example/.env.local
+    container_name: nextjs-chat-example
+    command: npm run dev
+    restart: unless-stopped
