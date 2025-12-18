@@ -41,13 +41,24 @@ ai-agent-coding-hands-on/
 
 ```
 sample-name/
-├── app/                          # アプリケーション本体のコード
+├── working-directory/            # 作業ディレクトリ（ここで実装）
+│   └── (空 - プロンプトに従って作成)
+├── completed-example/            # 完成例（参考用）
+│   ├── (実装済みコード)
+│   ├── (テストコード)
+│   └── README.md                # 実行方法と解説
 ├── prompts/                      # プロンプトや手順書
-│   ├── 01-setup.md              # セットアップ手順
-│   ├── 02-implementation.md     # 実装手順とプロンプト
+│   ├── 00-setup.md              # セットアップ手順
+│   ├── 01-xxx.md                # ステップ1
+│   ├── 02-xxx.md                # ステップ2
 │   └── prompts.json             # 再利用可能なプロンプト集
 └── README.md                     # サンプルの説明
 ```
+
+**学習の流れ**：
+1. `prompts/` の手順書に従って、`working-directory/` で実装
+2. わからなくなったら `completed-example/` を参照
+3. 最終的に完成例と同じものができる
 
 ## クイックスタート
 
@@ -66,7 +77,9 @@ cd ai-agent-coding-hands-on
 
 1. `claude-code/` ディレクトリから興味のあるサンプルを選ぶ
 2. 各サンプルの `README.md` を読む
-3. `prompts/` ディレクトリの手順に従って実装を進める
+3. `working-directory/` に移動して Claude Code を起動
+4. `prompts/` ディレクトリの手順（00-setup.md から順番）に従って実装
+5. 困ったら `completed-example/` の完成例を参照
 
 ## 推奨する学習順序
 

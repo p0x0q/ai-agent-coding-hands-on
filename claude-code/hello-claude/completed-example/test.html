@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タスクリスト - テスト</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .test-result.pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-result.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .stats {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>タスクリスト - 簡易テスト</h1>
+
+    <div class="test-section">
+        <h2>マニュアルテスト</h2>
+        <p>以下のボタンをクリックして、各機能をテストしてください。</p>
+        <button onclick="testAddTask()">タスク追加テスト</button>
+        <button onclick="testDeleteTask()">タスク削除テスト</button>
+        <button onclick="testToggleComplete()">完了切り替えテスト</button>
+        <button onclick="testLocalStorage()">LocalStorageテスト</button>
+        <button onclick="runAllTests()">全テスト実行</button>
+        <button onclick="clearResults()">結果をクリア</button>
+        <div id="results"></div>
+        <div id="stats" class="stats"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>アプリケーション</h2>
+        <iframe src="index.html" width="100%" height="600" style="border: 1px solid #ddd; border-radius: 4px;"></iframe>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        function addResult(testName, passed, message) {
+            testResults.push({ testName, passed, message });
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('results');
+            const statsDiv = document.getElementById('stats');
+
+            resultsDiv.innerHTML = testResults.map(result => `
+                <div class="test-result ${result.passed ? 'pass' : 'fail'}">
+                    <strong>${result.testName}</strong>: ${result.message}
+                </div>
+            `).join('');
+
+            const passed = testResults.filter(r => r.passed).length;
+            const total = testResults.length;
+            statsDiv.textContent = `結果: ${passed}/${total} テスト通過`;
+        }
+
+        function clearResults() {
+            testResults = [];
+            displayResults();
+        }
+
+        function testAddTask() {
+            try {
+                // LocalStorageをクリア
+                localStorage.removeItem('tasks');
+
+                // 新しいタスクを作成
+                const task = {
+                    id: Date.now(),
+                    text: 'テストタスク',
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+
+                // LocalStorageに保存
+                const tasks = [task];
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+
+                // 検証
+                const loaded = JSON.parse(localStorage.getItem('tasks'));
+                const success = loaded.length === 1 && loaded[0].text === 'テストタスク';
+
+                addResult(
+                    'タスク追加',
+                    success,
+                    success ? 'タスクが正常に追加されました' : 'タスクの追加に失敗しました'
+                );
+            } catch (error) {
+                addResult('タスク追加', false, `エラー: ${error.message}`);
+            }
+        }
+
+        function testDeleteTask() {
+            try {
+                // 複数のタスクを作成
+                const tasks = [
+                    { id: 1, text: 'タスク1', completed: false },
+                    { id: 2, text: 'タスク2', completed: false },
+                    { id: 3, text: 'タスク3', completed: false }
+                ];
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+
+                // タスクを削除
+                const filtered = tasks.filter(t => t.id !== 2);
+                localStorage.setItem('tasks', JSON.stringify(filtered));
+
+                // 検証
+                const loaded = JSON.parse(localStorage.getItem('tasks'));
+                const success = loaded.length === 2 && !loaded.find(t => t.id === 2);
+
+                addResult(
+                    'タスク削除',
+                    success,
+                    success ? 'タスクが正常に削除されました' : 'タスクの削除に失敗しました'
+                );
+            } catch (error) {
+                addResult('タスク削除', false, `エラー: ${error.message}`);
+            }
+        }
+
+        function testToggleComplete() {
+            try {
+                // タスクを作成
+                const tasks = [
+                    { id: 1, text: 'タスク1', completed: false }
+                ];
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+
+                // 完了状態を切り替え
+                tasks[0].completed = true;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+
+                // 検証
+                const loaded = JSON.parse(localStorage.getItem('tasks'));
+                const success = loaded[0].completed === true;
+
+                addResult(
+                    '完了切り替え',
+                    success,
+                    success ? '完了状態が正常に切り替わりました' : '完了状態の切り替えに失敗しました'
+                );
+            } catch (error) {
+                addResult('完了切り替え', false, `エラー: ${error.message}`);
+            }
+        }
+
+        function testLocalStorage() {
+            try {
+                // LocalStorageの読み書きテスト
+                const testData = {
+                    id: 999,
+                    text: 'LocalStorageテスト',
+                    completed: false
+                };
+
+                localStorage.setItem('test', JSON.stringify(testData));
+                const loaded = JSON.parse(localStorage.getItem('test'));
+                localStorage.removeItem('test');
+
+                const success = loaded.id === testData.id && loaded.text === testData.text;
+
+                addResult(
+                    'LocalStorage',
+                    success,
+                    success ? 'LocalStorageが正常に動作しています' : 'LocalStorageの動作に問題があります'
+                );
+            } catch (error) {
+                addResult('LocalStorage', false, `エラー: ${error.message}`);
+            }
+        }
+
+        function runAllTests() {
+            clearResults();
+            testAddTask();
+            testDeleteTask();
+            testToggleComplete();
+            testLocalStorage();
+        }
+
+        // ページ読み込み時の初期化
+        window.addEventListener('load', () => {
+            displayResults();
+        });
+    </script>
+</body>
+</html>
