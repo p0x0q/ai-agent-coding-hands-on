@@ -25,7 +25,7 @@ help:
 # 開発環境コマンド
 serve-dev:
 	@echo "🚀 開発環境を起動中..."
-	docker compose -f docker-compose.dev.yaml up -d
+	docker compose -f docker-compose.dev.yaml up --build -d
 	@echo "✅ 開発環境が起動しました"
 	@echo "   フロントエンド: http://localhost:3000"
 	@echo "   バックエンドAPI: http://localhost:8002"
