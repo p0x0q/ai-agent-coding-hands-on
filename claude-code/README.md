@@ -241,7 +241,7 @@ claude restart
 
 ## フィードバック
 
-サンプルについての質問や改善提案は、[Issues](https://github.com/yourusername/ai-agent-coding-hands-on/issues) で受け付けています。
+サンプルについての質問や改善提案は、[Issues](https://github.com/p0x0q/ai-agent-coding-hands-on/issues) で受け付けています。
 
 新しいサンプルのアイデアも大歓迎です！
 
