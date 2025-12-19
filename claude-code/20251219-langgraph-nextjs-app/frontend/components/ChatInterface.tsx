@@ -98,9 +98,9 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[600px] border border-gray-300 rounded-lg overflow-hidden">
+    <div className="flex flex-col h-[600px] bg-white border border-slate-200 rounded-xl overflow-hidden shadow-md">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -109,27 +109,27 @@ export default function ChatInterface() {
             }`}
           >
             <div
-              className={`max-w-[80%] rounded-lg p-3 ${
+              className={`max-w-[80%] rounded-xl p-4 shadow-sm ${
                 message.role === 'user'
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-900'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-slate-900 border border-slate-200'
               }`}
             >
               <p className="whitespace-pre-wrap">{message.content}</p>
               {message.agentSteps && message.agentSteps.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-400">
-                  <p className="text-xs font-semibold mb-1">Agent Steps:</p>
+                <div className="mt-3 pt-3 border-t border-slate-300">
+                  <p className="text-xs font-semibold mb-2 text-slate-700">Agent Steps:</p>
                   {message.agentSteps.map((step, idx) => (
-                    <div key={idx} className="text-xs mb-1">
-                      <span className="font-semibold">{step.agent}:</span>{' '}
+                    <div key={idx} className="text-xs mb-1.5 text-slate-600">
+                      <span className="font-semibold text-slate-800">{step.agent}:</span>{' '}
                       {step.action}
                     </div>
                   ))}
                 </div>
               )}
               {message.elapsedTime !== undefined && (
-                <div className="mt-2 pt-2 border-t border-gray-400">
-                  <p className="text-xs text-gray-600">
+                <div className="mt-3 pt-3 border-t border-slate-300">
+                  <p className="text-xs text-slate-600">
                     処理時間: {message.elapsedTime.toFixed(1)}秒
                   </p>
                 </div>
@@ -139,9 +139,9 @@ export default function ChatInterface() {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-200 text-gray-900 rounded-lg p-3">
-              <p className="animate-pulse">考え中...</p>
-              <p className="text-xs text-gray-600 mt-1">
+            <div className="bg-white text-slate-900 border border-slate-200 rounded-xl p-4 shadow-sm">
+              <p className="animate-pulse font-medium">考え中...</p>
+              <p className="text-xs text-slate-600 mt-2">
                 経過時間: {elapsedTime.toFixed(1)}秒
               </p>
             </div>
@@ -150,20 +150,20 @@ export default function ChatInterface() {
       </div>
 
       {/* Input Area */}
-      <form onSubmit={handleSubmit} className="border-t border-gray-300 p-4">
-        <div className="flex gap-2">
+      <form onSubmit={handleSubmit} className="border-t border-slate-200 p-6 bg-white">
+        <div className="flex gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="メッセージを入力..."
-            className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+            className="flex-1 p-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 bg-white shadow-sm"
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors shadow-sm font-medium"
           >
             送信
           </button>
