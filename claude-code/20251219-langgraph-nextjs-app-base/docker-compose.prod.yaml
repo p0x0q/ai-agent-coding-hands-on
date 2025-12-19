@@ -3,7 +3,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: langgraph-nextjs-backend-prod
     ports:
       - "8002:8000"
     environment:
@@ -17,7 +16,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: langgraph-nextjs-frontend-prod
     ports:
       - "3000:3000"
     environment:
