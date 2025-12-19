@@ -1,6 +1,6 @@
 # AI Agent Coding Hands-on
 
-** 2025/12/19 ハンズオン参加者向け: ./claude-code/20251219-langgraph-nextjs-app-base 下のディレクトリを利用しますので、こちらを参照してください。**
+** 2025/12/19 ハンズオン参加者向け: [./claude-code/20251219-langgraph-nextjs-app-base](./claude-code/20251219-langgraph-nextjs-app-base) 下のディレクトリを利用しますので、こちらを参照してください。**
 
 AI駆動開発を実践的に学ぶためのハンズオンリポジトリです。Claude CodeをはじめとするAI開発ツールを使って、実際のアプリケーション開発を体験できます。
 
