@@ -65,7 +65,7 @@ sample-name/
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/yourusername/ai-agent-coding-hands-on.git
+git clone https://github.com/p0x0q/ai-agent-coding-hands-on.git
 cd ai-agent-coding-hands-on
 ```
 
@@ -152,7 +152,7 @@ MIT License
 
 ## サポート
 
-質問や問題がある場合は、[Issues](https://github.com/yourusername/ai-agent-coding-hands-on/issues) で報告してください。
+質問や問題がある場合は、[Issues](https://github.com/p0x0q/ai-agent-coding-hands-on/issues) で報告してください。
 
 ---
 
