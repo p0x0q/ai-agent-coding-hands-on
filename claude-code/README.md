@@ -4,4 +4,5 @@
 
 各サンプルには、セットアップ手順、コード例、実行方法が記載されたREADMEファイルがあります。以下のサンプルが含まれています：
 
-- `20251219-langgraph-nextjs-app`: LangGraphを使用したNext.jsとFastAPIのマルチエージェントチャットアプリケーション。
+- `20251219-langgraph-nextjs-app-light`: LangGraphを使用したNext.jsとFastAPIのマルチエージェントチャットアプリケーション。
+- `20251219-langgraph-nextjs-app-base`: LangGraphを使用したNext.jsとFastAPIのマルチエージェントチャットアプリケーション。
