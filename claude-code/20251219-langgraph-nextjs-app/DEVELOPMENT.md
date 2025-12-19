@@ -64,25 +64,42 @@ make status         # コンテナの状態を確認
 ### フロントエンド
 ```
 frontend/
-├── app/              # Next.js App Router (ホットリロード対象)
-├── components/       # Reactコンポーネント (ホットリロード対象)
-├── lib/             # ユーティリティ (ホットリロード対象)
-├── public/          # 静的ファイル (ホットリロード対象)
-├── Dockerfile       # 本番用Dockerfile
-├── Dockerfile.dev   # 開発用Dockerfile
-└── package.json
+├── app/                   # Next.js App Router (ホットリロード対象)
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/            # Reactコンポーネント (ホットリロード対象)
+│   ├── ChatInterface.tsx
+│   └── WorkflowViewer.tsx
+├── lib/                   # ユーティリティ (ホットリロード対象)
+├── public/                # 静的ファイル (ホットリロード対象)
+├── Dockerfile             # 本番用Dockerfile
+├── Dockerfile.dev         # 開発用Dockerfile
+├── next.config.ts
+├── package.json
+├── tailwind.config.ts
+└── tsconfig.json
 ```
 
 ### バックエンド
 ```
 backend/
 ├── app/
-│   ├── agents/      # LangGraphエージェント (ホットリロード対象)
-│   ├── api/         # FastAPI ルート (ホットリロード対象)
-│   ├── services/    # ビジネスロジック (ホットリロード対象)
-│   ├── models/      # データモデル (ホットリロード対象)
-│   └── main.py      # エントリーポイント (ホットリロード対象)
-├── Dockerfile       # 本番用Dockerfile
+│   ├── agents/           # LangGraphエージェント (ホットリロード対象)
+│   │   ├── analyzer.py
+│   │   ├── composer.py
+│   │   ├── graph.py
+│   │   ├── researcher.py
+│   │   ├── router.py
+│   │   └── state.py
+│   ├── api/              # FastAPI ルート (ホットリロード対象)
+│   │   └── chat.py
+│   ├── models/           # データモデル (ホットリロード対象)
+│   │   └── schemas.py
+│   ├── services/         # 外部サービス連携 (ホットリロード対象)
+│   │   └── perplexity.py
+│   └── main.py           # エントリーポイント (ホットリロード対象)
+├── Dockerfile            # 本番用Dockerfile
 └── requirements.txt
 ```
 

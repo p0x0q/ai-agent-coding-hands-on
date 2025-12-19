@@ -5,35 +5,54 @@
 ### 1. プロジェクト構造
 ```
 .
-├── frontend/              # Next.js 15 アプリケーション
-│   ├── app/              # App Router (layout.tsx, page.tsx, globals.css)
-│   ├── components/       # ChatInterface.tsx
-│   ├── lib/             # ユーティリティ(予約)
-│   ├── public/          # 静的ファイル
-│   ├── Dockerfile       # フロントエンドコンテナ設定
-│   └── package.json     # 依存関係
+├── frontend/                  # Next.js 15 アプリケーション
+│   ├── app/                   # App Router
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/            # Reactコンポーネント
+│   │   ├── ChatInterface.tsx
+│   │   └── WorkflowViewer.tsx
+│   ├── lib/                   # ユーティリティ
+│   ├── public/                # 静的ファイル
+│   ├── Dockerfile             # 本番用
+│   ├── Dockerfile.dev         # 開発用
+│   ├── next.config.ts
+│   ├── package.json
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
 │
-├── backend/              # Python 3.11 バックエンド
+├── backend/                   # Python 3.11 バックエンド
 │   ├── app/
-│   │   ├── agents/      # LangGraphエージェント
-│   │   │   ├── state.py        # 共有ステート定義
-│   │   │   ├── graph.py        # LangGraphワークフロー
-│   │   │   ├── researcher.py   # Researcher Agent (Perplexity API)
-│   │   │   ├── analyzer.py     # Analyzer Agent
-│   │   │   └── composer.py     # Composer Agent
-│   │   ├── api/         # FastAPI ルート
-│   │   │   └── chat.py        # チャットエンドポイント
-│   │   ├── services/    # ビジネスロジック
-│   │   │   └── perplexity.py  # Perplexity API統合
-│   │   ├── models/      # データモデル
-│   │   │   └── schemas.py     # Pydantic スキーマ
-│   │   └── main.py      # FastAPIアプリケーション
-│   ├── Dockerfile       # バックエンドコンテナ設定
-│   └── requirements.txt # Python依存関係
+│   │   ├── agents/           # LangGraphエージェント
+│   │   │   ├── analyzer.py   # Analyzer Agent
+│   │   │   ├── composer.py   # Composer Agent
+│   │   │   ├── graph.py      # LangGraphワークフロー
+│   │   │   ├── researcher.py # Researcher Agent
+│   │   │   ├── router.py     # Router Agent
+│   │   │   └── state.py      # 共有ステート定義
+│   │   ├── api/              # FastAPI ルート
+│   │   │   └── chat.py
+│   │   ├── models/           # データモデル
+│   │   │   └── schemas.py
+│   │   ├── services/         # 外部サービス連携
+│   │   │   └── perplexity.py
+│   │   └── main.py           # FastAPIエントリーポイント
+│   ├── Dockerfile
+│   └── requirements.txt
 │
-├── docker-compose.yaml   # 統合起動設定
-├── .env                  # 環境変数(APIキー設定済み)
-└── README.md            # プロジェクト説明
+├── tutorial-prompts/          # チュートリアル用プロンプト
+│   └── STEP1.md
+│
+├── docker-compose.yaml        # 基本Docker構成
+├── docker-compose.dev.yaml    # 開発環境構成
+├── docker-compose.prod.yaml   # 本番環境構成
+├── Makefile                   # 開発用コマンド
+├── .env                       # 環境変数(APIキー設定済み)
+├── CLAUDE.md                  # Claude Code向けガイド
+├── DEVELOPMENT.md             # 開発ドキュメント
+├── SETUP.md                   # セットアップガイド
+└── README.md                  # このファイル
 ```
 
 ### 2. 実装された機能
@@ -52,9 +71,10 @@
 - ✅ LangGraphマルチエージェントシステム
 - ✅ **Perplexity API統合** (WEB検索機能)
 - ✅ OpenAI GPT統合
-- ✅ 3つの専門エージェント実装:
-  - **Researcher Agent**: Perplexity APIを使用したWEB検索
-  - **Analyzer Agent**: 情報分析と洞察抽出
+- ✅ 4つの専門エージェント実装:
+  - **Router Agent**: クエリ分析と条件付きルーティング
+  - **Researcher Agent**: Perplexity APIを使用したWEB検索（条件付き実行）
+  - **Analyzer Agent**: 検索結果の分析と洞察抽出
   - **Composer Agent**: 最終回答の生成
 
 #### インフラ (Docker)
@@ -67,18 +87,43 @@
 
 ### 3. 起動方法
 
+**開発環境（ホットリロード有効）**:
 ```bash
-# プロジェクトディレクトリに移動
-cd /Users/kosuke.takanezawa/Documents/GitHub/shared-scripts/kosuke.takanezawa/20251017-AIハッカソン初期アプリ
-
-# Docker Composeで起動
-docker compose up -d
+# 開発環境を起動
+make serve-dev
 
 # ログ確認
-docker compose logs -f
+make logs-dev
+
+# 再起動
+make restart-dev
 
 # 停止
-docker compose down
+make down-dev
+```
+
+**本番環境**:
+```bash
+# 本番環境を起動
+make serve-prod
+
+# ログ確認
+make logs-prod
+
+# 停止
+make down-prod
+```
+
+**その他のコマンド**:
+```bash
+# ヘルプを表示
+make help
+
+# すべてクリーンアップ
+make clean
+
+# コンテナの状態を確認
+make status
 ```
 
 ### 4. アクセス情報
@@ -99,14 +144,19 @@ docker compose down
 
 ### 6. エージェントワークフロー
 
+**Web検索が必要な場合** (`needs_research=True`):
 ```
 ユーザー入力
     ↓
+Router Agent (OpenAI GPT)
+    - ユーザーの質問と会話コンテキストを分析
+    - Web検索が必要かを判断
+    - needs_researchフラグを設定
+    ↓
 Researcher Agent (Perplexity API)
-    - ユーザーの質問を分析
     - WEB検索クエリを生成
     - Perplexity APIで検索実行
-    - 検索結果を収集
+    - 引用付き検索結果を収集
     ↓
 Analyzer Agent (OpenAI GPT)
     - 検索結果を分析
@@ -115,8 +165,24 @@ Analyzer Agent (OpenAI GPT)
     ↓
 Composer Agent (OpenAI GPT)
     - 分析結果を統合
+    - 会話コンテキストを活用
     - ユーザーフレンドリーな回答を生成
-    - フォーマット整形
+    ↓
+ユーザーへ出力
+```
+
+**一般的な知識で回答可能な場合** (`needs_research=False`):
+```
+ユーザー入力
+    ↓
+Router Agent (OpenAI GPT)
+    - ユーザーの質問と会話コンテキストを分析
+    - 一般的な知識で回答可能と判断
+    - needs_research=Falseを設定
+    ↓
+Composer Agent (OpenAI GPT)
+    - 会話コンテキストを活用
+    - ユーザーフレンドリーな回答を生成（直接パス）
     ↓
 ユーザーへ出力
 ```
@@ -187,5 +253,5 @@ docker compose up -d
 
 ---
 
-**実装完了日**: 2025-10-17
+**ドキュメント更新日**: 2025-12-19
 **ステータス**: ✅ 完全動作確認済み
