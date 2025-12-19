@@ -27,54 +27,105 @@ LangGraphを使用したマルチエージェントシステムのデモアプ�
 ### ディレクトリ構造
 ```
 .
-├── frontend/              # Next.js 15 アプリケーション
-│   ├── src/
-│   │   ├── app/          # App Router
-│   │   ├── components/   # Reactコンポーネント
-│   │   └── lib/          # ユーティリティ
-│   ├── Dockerfile
-│   └── package.json
+├── frontend/                  # Next.js 15 アプリケーション
+│   ├── app/                   # App Router
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/            # Reactコンポーネント
+│   │   ├── ChatInterface.tsx
+│   │   └── WorkflowViewer.tsx
+│   ├── lib/                   # ユーティリティ
+│   ├── public/                # 静的ファイル
+│   ├── Dockerfile             # 本番用
+│   ├── Dockerfile.dev         # 開発用
+│   ├── next.config.ts
+│   ├── package.json
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
 │
-├── backend/              # Python バックエンド
+├── backend/                   # Python 3.11 バックエンド
 │   ├── app/
-│   │   ├── agents/      # LangGraphエージェント定義
-│   │   ├── api/         # FastAPI ルート
-│   │   ├── services/    # ビジネスロジック
-│   │   └── main.py      # エントリーポイント
+│   │   ├── agents/           # LangGraphエージェント
+│   │   │   ├── analyzer.py   # Analyzer Agent
+│   │   │   ├── composer.py   # Composer Agent
+│   │   │   ├── graph.py      # LangGraphワークフロー
+│   │   │   ├── researcher.py # Researcher Agent
+│   │   │   ├── router.py     # Router Agent
+│   │   │   └── state.py      # 共有ステート定義
+│   │   ├── api/              # FastAPI ルート
+│   │   │   └── chat.py
+│   │   ├── models/           # データモデル
+│   │   │   └── schemas.py
+│   │   ├── services/         # 外部サービス連携
+│   │   │   └── perplexity.py
+│   │   └── main.py           # FastAPIエントリーポイント
 │   ├── Dockerfile
 │   └── requirements.txt
 │
-├── docker-compose.yaml   # 統合起動設定
-├── .env                  # 環境変数(OpenAI APIキー等)
-└── README.md            # このファイル
+├── tutorial-prompts/          # チュートリアル用プロンプト
+│   └── STEP1.md
+│
+├── docker-compose.yaml        # 基本Docker構成
+├── docker-compose.dev.yaml    # 開発環境構成
+├── docker-compose.prod.yaml   # 本番環境構成
+├── Makefile                   # 開発用コマンド
+├── .env                       # 環境変数(OpenAI APIキー等)
+├── CLAUDE.md                  # Claude Code向けガイド
+├── DEVELOPMENT.md             # 開発ドキュメント
+├── SETUP.md                   # セットアップガイド
+└── README.md                  # このファイル
 ```
 
 ## マルチエージェント設計(LangGraph)
 
 ### エージェント構成
-以下の3つの専門エージェントで協調動作するシステムを構築:
+以下の4つの専門エージェントで協調動作するシステムを構築:
 
-1. **Researcher Agent(リサーチャー)**
-   - 役割: ユーザーの質問を分析し、必要な情報を収集
-   - 機能: Web検索、データ収集、情報整理
+1. **Router Agent(ルーター)**
+   - 役割: ユーザーの質問を分析し、Web検索が必要かを判断
+   - 機能: クエリ分析、条件付きルーティング、コンテキスト評価
+   - 出力: `needs_research`フラグを設定
 
-2. **Analyzer Agent(アナライザー)**
-   - 役割: 収集された情報を分析・評価
+2. **Researcher Agent(リサーチャー)**
+   - 役割: Web検索が必要な場合のみ、情報を収集
+   - 機能: Perplexity APIを使用したWeb検索、データ収集、引用付き結果の整理
+   - 条件: `needs_research=True`の場合のみ実行
+
+3. **Analyzer Agent(アナライザー)**
+   - 役割: 収集された検索結果を分析・評価
    - 機能: データ分析、パターン認識、洞察抽出
+   - 条件: Researcherの後にのみ実行
 
-3. **Composer Agent(コンポーザー)**
-   - 役割: 分析結果を統合し、最終的な回答を生成
-   - 機能: 回答生成、フォーマット整形、品質確認
+4. **Composer Agent(コンポーザー)**
+   - 役割: 最終的な回答を生成
+   - 機能: 回答生成、フォーマット整形、会話コンテキストの活用
+   - 実行: すべてのパスで最終ステップとして実行
 
 ### ワークフロー
+
+**Web検索が必要な場合** (`needs_research=True`):
 ```
 [ユーザー入力]
     ↓
-[Researcher] → 情報収集
+[Router] → クエリ分析・ルーティング判定
     ↓
-[Analyzer] → データ分析
+[Researcher] → Perplexity APIでWeb検索
     ↓
-[Composer] → 回答生成
+[Analyzer] → 検索結果の分析
+    ↓
+[Composer] → 最終回答生成
+    ↓
+[ユーザーへ出力]
+```
+
+**一般的な知識で回答可能な場合** (`needs_research=False`):
+```
+[ユーザー入力]
+    ↓
+[Router] → クエリ分析・ルーティング判定
+    ↓
+[Composer] → 最終回答生成（直接パス）
     ↓
 [ユーザーへ出力]
 ```
@@ -82,25 +133,28 @@ LangGraphを使用したマルチエージェントシステムのデモアプ�
 ### LangGraph State管理
 ```python
 class AgentState(TypedDict):
-    user_query: str           # ユーザーの質問
-    research_data: List[str]  # 収集した情報
-    analysis_result: Dict     # 分析結果
-    final_answer: str         # 最終回答
-    step_history: List[str]   # 実行履歴
+    user_query: str                    # ユーザーの質問
+    conversation_history: List[Dict]   # 会話履歴（コンテキスト用）
+    needs_research: bool               # Web検索が必要かのフラグ
+    messages: Annotated[List, add_messages]  # LangGraphメッセージ履歴
+    research_data: str                 # 収集した検索結果
+    analysis_result: str               # 分析結果
+    final_answer: str                  # 最終回答
+    step_history: List[Dict]           # エージェント実行履歴
 ```
 
 ## APIエンドポイント設計
 
 ### Backend API (FastAPI)
-- `POST /api/chat` - チャットメッセージ送信
-- `GET /api/chat/stream` - ストリーミングレスポンス(SSE)
-- `GET /api/agents/status` - エージェント状態確認
-- `GET /api/health` - ヘルスチェック
+- `POST /api/chat` - チャットメッセージ送信、エージェントグラフを実行
+- `GET /api/workflow/graph` - LangGraphのPNG可視化を返す
+- `GET /api/workflow/info` - エージェントメタデータと説明を返す
+- `GET /health` - ヘルスチェック
 
 ### Frontend Routes
-- `/` - メインチャット画面
-- `/history` - 会話履歴
-- `/agents` - エージェント動作可視化
+- `/` - メインチャット画面（ChatInterfaceコンポーネント）
+  - チャット入出力
+  - WorkflowViewerコンポーネントでエージェントワークフロー可視化
 
 ## 環境変数
 
