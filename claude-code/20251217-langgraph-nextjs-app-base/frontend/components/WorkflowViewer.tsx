@@ -55,22 +55,22 @@ export default function WorkflowViewer() {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-md">
+    <div className="border border-gray-300 rounded-lg overflow-hidden">
       {/* Header */}
       <button
         onClick={handleToggle}
-        className="w-full p-6 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-left flex items-center justify-between transition-all duration-200"
+        className="w-full p-4 bg-gray-100 hover:bg-gray-200 text-left flex items-center justify-between transition-colors"
       >
         <div>
-          <h2 className="text-xl font-bold text-slate-900">
+          <h2 className="text-xl font-semibold text-gray-900">
             ワークフロー設計
           </h2>
-          <p className="text-sm text-slate-600 mt-1">
+          <p className="text-sm text-gray-600 mt-1">
             LangGraphによるマルチエージェントワークフローの可視化
           </p>
         </div>
         <svg
-          className={`w-6 h-6 text-slate-600 transform transition-transform duration-200 ${
+          className={`w-6 h-6 text-gray-600 transform transition-transform ${
             isExpanded ? 'rotate-180' : ''
           }`}
           fill="none"
@@ -88,16 +88,16 @@ export default function WorkflowViewer() {
 
       {/* Content */}
       {isExpanded && (
-        <div className="p-6 bg-slate-50/30">
+        <div className="p-6 bg-white">
           {isLoading && (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
             </div>
           )}
 
           {error && (
             <div className="flex justify-center items-center h-64">
-              <div className="text-red-600 text-center">
+              <div className="text-red-500 text-center">
                 <svg
                   className="w-12 h-12 mx-auto mb-4"
                   fill="none"
@@ -111,7 +111,7 @@ export default function WorkflowViewer() {
                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p className="font-medium">{error}</p>
+                <p>{error}</p>
               </div>
             </div>
           )}
@@ -120,24 +120,24 @@ export default function WorkflowViewer() {
             <img
               src={`http://localhost:8002/api/workflow/graph?t=${Date.now()}`}
               alt="LangGraph Workflow Visualization"
-              className="max-w-full h-auto border border-slate-200 rounded-lg shadow-sm bg-white"
+              className="max-w-full h-auto border border-gray-200 rounded-lg shadow-sm"
               onLoad={handleImageLoad}
               onError={handleImageError}
             />
           </div>
 
           {workflowInfo && (
-            <div className="mt-6 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 shadow-sm">
-              <h3 className="font-bold text-slate-900 mb-2">
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">
                 エージェント構成:
               </h3>
-              <p className="text-sm text-slate-600 mb-4">
+              <p className="text-sm text-gray-600 mb-3">
                 {workflowInfo.description}
               </p>
-              <ul className="space-y-2.5 text-sm text-slate-700">
+              <ul className="space-y-2 text-sm text-gray-700">
                 {workflowInfo.agents.map((agent) => (
                   <li key={agent.name} className="flex items-start">
-                    <span className="font-bold mr-2 text-blue-700">
+                    <span className="font-semibold mr-2">
                       {agent.order}. {agent.name}:
                     </span>
                     <span>{agent.description}</span>
