@@ -1,5 +1,5 @@
-import ChatInterface from '../components/ChatInterface';
-import WorkflowViewer from '../components/WorkflowViewer';
+import ChatInterface from "../components/ChatInterface";
+import WorkflowViewer from "../components/WorkflowViewer";
 
 export default function Home() {
   return (
